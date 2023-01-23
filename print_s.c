@@ -17,7 +17,7 @@ int print_s(va_list list)
 
 	s = va_arg(list, char *);
 	if (s == NULL)
-		return (-1);
+		return (0);
 	size = strlen(s);
 	r = write(1, s, size * sizeof(char));
 	if (r != size)
