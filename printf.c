@@ -4,6 +4,33 @@
 #include "main.h"
 
 /**
+ * _isalpha - test if a char is alpha
+ * @c: character
+ *
+ * Return: 1 (success), 0 otherwise
+ */
+int _isalpha(char c)
+{
+	if ((c >= 65 && c <= 90) ||
+		(c >= 97 && c <= 122))
+		return (1);
+	return (0);
+}
+
+/**
+ * _isupper - checks if a char is uppercase
+ * @c: character
+ *
+ * Return: 1 (success), 0 otherwise
+ */
+int _isupper(char c)
+{
+	if (c >= 65 && c <= 90)
+		return (1);
+	return (0);
+}
+
+/**
  * get_func - get the pointer to a function
  * @c: type
  * @t: list of types and corresponding functions
@@ -12,10 +39,12 @@
  */
 int (*get_func(char c, type_t *t))(va_list)
 {
-	int i;
+	int i, flag;
 
+	flag = (_isupper(c) ? 32 : (-32));
 	for (i = 0; t[i].c != NULL; i++)
-		if (c == *(t[i].c))
+		if (c == *(t[i].c) ||
+			(c + flag) == *(t[i].c))
 			return (t[i].f);
 	return (NULL);
 }
@@ -37,12 +66,9 @@ int _printf(const char *format, ...)
 		{NULL, NULL}
 	};
 
-	if (format == NULL || *format == '\0')
-		return (0);
-
 	va_start(list, format);
 	i = count = 0;
-	while (format[i] != '\0')
+	while (format != NULL && format[i] != '\0')
 	{
 		while (format[i] != '%' && format[i] != '\0')
 		{
@@ -54,6 +80,10 @@ int _printf(const char *format, ...)
 		if (format[i] == '%' && format[i + 1] != '\0')
 		{
 			i++;
+			while (!_isalpha(format[i]) && format[i] != '\0')
+				i++;
+			if (format[i] == '\0')
+				return (count);
 			f = get_func(format[i], type_out);
 			if (f == NULL)
 				return (count);
