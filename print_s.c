@@ -12,14 +12,15 @@
  */
 int print_s(va_list list)
 {
-	int size;
+	int size, r;
 	char *s;
 
 	s = va_arg(list, char *);
 	if (s == NULL)
 		return (-1);
 	size = strlen(s);
-	if (write(1, s, size * sizeof(char)) != size)
-		return (-1);
+	r = write(1, s, size * sizeof(char));
+	if (r != size)
+		return (r);
 	return (size);
 }

@@ -16,7 +16,7 @@ int (*get_func(char c, type_t *t))(va_list)
 
 	for (i = 0; t[i].c != NULL; i++)
 		if (c == *(t[i].c))
-			return t[i].f;
+			return (t[i].f);
 	return (NULL);
 }
 
@@ -29,7 +29,7 @@ int (*get_func(char c, type_t *t))(va_list)
 int _printf(const char *format, ...)
 {
 	va_list list;
-	int i, count;
+	int i, count, r;
 	int (*f)(va_list);
 	type_t type_out[] = {
 		{"c", print_c},
@@ -38,13 +38,13 @@ int _printf(const char *format, ...)
 	};
 
 	if (format == NULL || *format == '\0')
-		return (-1);
+		return (0);
 
 	va_start(list, format);
 	i = count = 0;
 	while (format[i] != '\0')
 	{
-		while(format[i] != '%' && format[i] != '\0')
+		while (format[i] != '%' && format[i] != '\0')
 		{
 			if (write(1, &format[i], sizeof(char)) != 1)
 				return (count);
@@ -55,7 +55,8 @@ int _printf(const char *format, ...)
 		{
 			i++;
 			f = get_func(format[i], type_out);
-			count += f(list);
+			r = f(list);
+			count += r;
 			i++;
 		}
 	}
