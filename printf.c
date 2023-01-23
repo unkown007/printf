@@ -55,6 +55,8 @@ int _printf(const char *format, ...)
 		{
 			i++;
 			f = get_func(format[i], type_out);
+			if (f == NULL)
+				return (count);
 			r = f(list);
 			count += r;
 			i++;
